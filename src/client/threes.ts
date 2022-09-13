@@ -77,6 +77,13 @@ mount(document.body, () => {
 
         stepPlayer = (d: V) => {
           if ((d.x && d.y) || (!d.x && !d.y)) { return }
+          if (d.x) {
+            player.facing.x = d.x > 0 ? "right" : "left"
+            player.facing.y = "middle"
+          } else {
+            player.facing.y = d.y > 0 ? "down" : "up"
+          }
+
           const
             oldPos = player.tile,
             newPos = plus_(d, player.tile),
@@ -288,11 +295,11 @@ mount(document.body, () => {
               drawer.clear()
               drawer.track(player, () => {
                 drawer.world(world)
-                drawer.player(goal)
+                drawer.thing(goal)
                 // NOTE: if _state !== "play", it's game over.
                 // if the enemy is null, player has been eaten and should not be drawn
                 if (_state.t !== "end" || enemy != null) { drawer.player(player) }
-                if (_state.t === "play" && enemy != null) { drawer.player(enemy) }
+                if (_state.t === "play" && enemy != null) { drawer.thing(enemy) }
                 drawer.particles(particles)
               })
               if (_state.t === "play" && enemy != null) {

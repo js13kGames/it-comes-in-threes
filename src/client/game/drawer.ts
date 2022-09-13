@@ -9,6 +9,7 @@ import { PropView } from "rocket/prop/prop"
 import { Chunk, CHUNK_BG, CHUNK_SIZE } from "./chunk"
 import { Enemy } from "./enemy"
 import { GameSize } from "./game-size"
+import { Goal } from "./goal"
 import { Particle } from "./particle"
 import { Player } from "./player"
 import { HALF_TILE, interpolateFlash, TILE_SIZE } from "./tile"
@@ -19,7 +20,8 @@ export type Drawer = {
   clear(): void
   darkness(level: number): void
   particles(particles: Particle[]): void
-  player(player: Enemy | Player): void
+  player(player: Player): void
+  thing(thing: Enemy | Goal): void
   track(player: Player, cb: () => void): void
   world(world: World): void
 }
@@ -77,7 +79,20 @@ export const
           },
 
           player(player) {
-            ctx.drawImage(player.sprite, player.pos.x, player.pos.y)
+            ctx.save()
+              ctx.translate(player.pos.x + (player.facing.x === "left" ? TILE_SIZE.x : 0), player.pos.y)
+              ctx.scale(player.facing.x === "left" ? -1 : 1, 1)
+              ctx.drawImage(player.sprite,
+                (player.facing.y === "down" ? 0 : player.facing.y === "middle" ? 1 : 2) * TILE_SIZE.x, 0,
+                TILE_SIZE.x, TILE_SIZE.y,
+                0, 0,
+                TILE_SIZE.x, TILE_SIZE.y
+              )
+            ctx.restore()
+          },
+
+          thing(thing) {
+            ctx.drawImage(thing.sprite, thing.pos.x, thing.pos.y)
           },
 
           track(player, cb) {

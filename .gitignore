@@ -1,0 +1,12 @@
+_dist/
+.rpt2_cache/
+.vscode/
+node_modules/
+src/client/tsconfig.json
+src/server/tsconfig.json
+static/*.css
+static/*.js
+static/*.map
+build.zip
+tslint.json
+*.gen.ts
